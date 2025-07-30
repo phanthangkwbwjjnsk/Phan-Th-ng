@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Menu lockShadow Pro</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', sans-serif;
+      color: #fff;
+      background: #000;
+    }
+
+    canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: -2;
+    }
+
+    .avatar-bg {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%) scale(1.5);
+      z-index: -1;
+      opacity: 0.08;
+      filter: drop-shadow(0 0 20px #00fff7);
+      animation: float 8s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0% { transform: translate(-50%, -50%) scale(1.5) rotate(0deg); }
+      50% { transform: translate(-50%, -52%) scale(1.55) rotate(2deg); }
+      100% { transform: translate(-50%, -50%) scale(1.5) rotate(0deg); }
+    }
+
+    header {
+      text-align: center;
+      padding: 20px;
+      font-size: 2em;
+      font-weight: bold;
+      color: #00f0ff;
+      text-shadow: 0 0 8px #00f0ff;
+    }
+
+    .menu {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .item {
+      background: rgba(0,0,0,0.6);
+      border: 2px solid #00f0ff;
+      padding: 15px;
+      border-radius: 12px;
+      text-align: center;
+      transition: 0.4s ease;
+      box-shadow: 0 0 5px #00f0ff, 0 0 15px #00f0ff inset;
+    }
+
+    .item:hover {
+      transform: scale(1.07);
+      box-shadow: 0 0 12px #00ffea, 0 0 25px #00f0ff inset;
+      background: #001f3f;
+    }
+
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 46px;
+      height: 24px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #888;
+      transition: .4s;
+      border-radius: 24px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 18px;
+      width: 18px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .4s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #00ffea;
+      box-shadow: 0 0 8px #00fff2;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+  </style>
+</head>
+<body>
+<canvas id="gridCanvas"></canvas>
+
+<!-- Avatar ẩn trong nền -->
+<img src="https://i.imgur.com/3Jj3QKr.png" class="avatar-bg" width="320" height="320" alt="Avatar"/>
+
+<header>⚡Lock Head Shadow⚡</header>
+
+<section class="menu">
+  <div class="item">AIMLOCK<br><label class="switch"><input type="checkbox" onchange="toggle(this,'AIMLOCK')"><span class="slider"></span></label></div>
+  <div class="item">NHẸ TÂM<br><label class="switch"><input type="checkbox" onchange="toggle(this,'NHẸ TÂM')"><span class="slider"></span></label></div>
+  <div class="item">BÁM ĐẦU<br><label class="switch"><input type="checkbox" onchange="toggle(this,'BÁM ĐẦU')"><span class="slider"></span></label></div>
+  <div class="item">GIẢM RUNG<br><label class="switch"><input type="checkbox" onchange="toggle(this,'GIẢM RUNG')"><span class="slider"></span></label></div>
+  <div class="item">NHẠY MÁY<br><label class="switch"><input type="checkbox" onchange="toggle(this,'NHẠY MÁY')"><span class="slider"></span></label></div>
+  <div class="item">GIẢM DELAY<br><label class="switch"><input type="checkbox" onchange="toggle(this,'GIẢM DELAY')"><span class="slider"></span></label></div>
+</section>
+
+<script>
+// Toggle effect
+function toggle(elem, name) {
+  if (elem.checked) {
+    alert(name + " 🔛 BẬT!");
+    console.log(name + " bật");
+  } else {
+    alert(name + " 🔻 TẮT!");
+    console.log(name + " tắt");
+  }
+}
+
+// Lưới điện động
+const canvas = document.getElementById('gridCanvas');
+const ctx = canvas.getContext('2d');
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+let gridSize = 40;
+let offset = 0;
+
+function drawGrid() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.strokeStyle = 'rgba(0,255,255,0.2)';
+  ctx.lineWidth = 1;
+
+  for (let x = -gridSize; x < canvas.width + gridSize; x += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(x + offset, 0);
+    ctx.lineTo(x + offset, canvas.height);
+    ctx.stroke();
+  }
+  for (let y = -gridSize; y < canvas.height + gridSize; y += gridSize) {
+    ctx.beginPath();
+    ctx.moveTo(0, y + offset);
+    ctx.lineTo(canvas.width, y + offset);
+    ctx.stroke();
+  }
+
+  offset = (offset + 0.5) % gridSize;
+  requestAnimationFrame(drawGrid);
+}
+
+drawGrid();
+</script>
+</body>
+</html>
